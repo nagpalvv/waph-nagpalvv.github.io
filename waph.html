@@ -1,44 +1,51 @@
-<script>
-    // 1. Digital Clock
-    function updateDigitClock() {
-        document.getElementById('digit-clock').innerHTML = "Digital Clock: " + new Date().toLocaleTimeString();
-    }
-    setInterval(updateDigitClock, 1000);
-    updateDigitClock();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WAPH Course Information</title>
+    <!-- Use standard Bootstrap CDN for reliability -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body style="padding: 20px;">
 
-    // 2. API Integrations
-    $(document).ready(function() {
-        console.log("jQuery is loaded: " + (typeof jQuery !== 'undefined'));
+    <h1>WAPH Course Information</h1>
+    <a href="index.html" class="btn btn-primary">← Back to Professional Profile</a>
+    <hr>
 
-        // Joke API
-        function fetchJoke() {
-            $.ajax({
-                url: "https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=single",
-                method: "GET",
-                success: function(res) {
-                    console.log("Joke received:", res);
-                    $("#joke-container").text(res.joke);
-                },
-                error: function(err) {
-                    console.error("Joke API Error:", err);
-                    $("#joke-container").text("Failed to load joke.");
-                }
-            });
-        }
-        fetchJoke();
-        setInterval(fetchJoke, 60000);
+    <h3>Labs & Hackathons</h3>
+    <ul>
+        <li>Lab 0: Development Environment Setup.</li>
+        <li>Lab 1: Foundations of the Web (HTTP, CGI, PHP).</li>
+        <li>Lab 2: Front-end Web Development (Ajax, jQuery, APIs).</li>
+        <li>Hackathon 1: XSS Attacks and Defenses.</li>
+    </ul>
 
-        // Dog API
-        $.ajax({
-            url: "https://dog.ceo/api/breeds/image/random",
-            method: "GET",
-            success: function(res) {
-                console.log("Dog image received:", res);
-                $("#graphic-api").attr("src", res.message);
-            },
-            error: function(err) {
-                console.error("Dog API Error:", err);
-            }
+    <hr>
+    <h3>Technical Widgets</h3>
+    <div id="welcome-message"></div>
+    <div id="digit-clock" style="font-weight:bold;"></div>
+    
+    <h4>API Integrations</h4>
+    <div><strong>Joke API:</strong> <p id="joke-container">Loading joke...</p></div>
+    <div><strong>Graphic API (Dog):</strong><br><img id="graphic-api" src="" alt="Dog" width="200"></div>
+
+    <script>
+        // 1. Digital Clock
+        setInterval(() => {
+            document.getElementById('digit-clock').innerText = "Time: " + new Date().toLocaleTimeString();
+        }, 1000);
+
+        // 2. APIs
+        $(document).ready(function() {
+            // Joke
+            $.get("https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=single", 
+                function(res) { if(!res.error) $("#joke-container").text(res.joke); });
+            
+            // Dog
+            $.get("https://dog.ceo/api/breeds/image/random", 
+                function(res) { $("#graphic-api").attr("src", res.message); });
         });
-    });
-</script>
+    </script>
+</body>
+</html>
